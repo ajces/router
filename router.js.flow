@@ -1,0 +1,30 @@
+declare module "router" {
+  declare type Emit = (event: string, data: any) => any;
+  
+  declare type Thunk = () => { [string]: any };
+  declare type ActionResult = { [string]: any } | Thunk;
+  declare type Action = (
+    state: { [string]: any },
+    actions: { [string]: Action },
+    data?: any
+  ) => ActionResult;
+  declare type Actions = { [string]: Action };
+
+  declare type Event = (
+    state: { [string]: any },
+    actions: Actions,
+    data?: any
+  ) => any;
+  declare type Events = { [string]: Event };
+
+  declare type Mixin = (
+    emit: Emit
+  ) => {
+    state?: { [string]: any },
+    actions?: Actions,
+    events?: Events,
+    mixins?: Array<Mixin>
+  };
+
+  declare export function Router(defaultMeta: { [string]: string }): Mixin;
+}

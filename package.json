@@ -1,7 +1,7 @@
 {
   "name": "@ajces/router",
   "description": "Utilities for routing client-side pages with Hyperapp/Idiom.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/router.js",
   "jsnext:main": "src/index.js",
   "module": "src/index.js",
@@ -28,22 +28,29 @@
   ],
   "scripts": {
     "test": "jest --coverage --no-cache --testURL https://hyperapp.js.org",
-    "build": "npm run bundle && npm run minify",
+    "build": "npm run bundle && npm run minify && cp router.js.flow dist/",
     "bundle": "rollup -i src/index.js -o dist/router.js -f umd -mn Router",
     "minify": "uglifyjs dist/router.js -o dist/router.js --mangle --compress warnings=false --pure-funcs=Object.defineProperty -p relative --source-map dist/router.js.map",
     "prepublish": "npm run build",
-    "format": "prettier --semi false --write 'src/**/*.js'",
+    "format": "prettier --write 'src/**/*.js'",
     "release": "npm run build && npm test && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
   },
   "babel": {
     "presets": "es2015"
   },
   "devDependencies": {
+    "@ajces/idiom": "^1.0.1",
     "babel-preset-es2015": "^6.24.1",
-    "hyperapp": "^0.12.0",
     "jest": "^20.0.4",
     "prettier": "~1.5.3",
     "rollup": "^0.47.6",
     "uglify-js": "^2.7.5"
+  },
+  "peerDependencies": {
+    "@ajces/utils": "^1.0.0",
+    "@ajces/idiom": "^1.0.1"
+  },
+  "dependencies": {
+    "@ajces/utils": "^1.0.0"
   }
 }

@@ -54,9 +54,9 @@ export function Router(defaultMeta) {
 
   function updateMeta(meta) {
     document.title = meta.title;
-    let dynamicMeta = [].filter.call(
+    var dynamicMeta = [].filter.call(
       document.getElementsByTagName("meta"),
-      el => {
+      function(el) {
         if (
           el.name === "" ||
           el.name === "origin" ||
@@ -69,13 +69,13 @@ export function Router(defaultMeta) {
         }
       }
     );
-    let keys = Object.keys(meta).filter(k => k !== "title");
-    let handled = [];
-    keys.forEach(k => {
-      let metaEl = dynamicMeta.filter(el => el.name === k)[0];
+    var keys = Object.keys(meta).filter(function(k) { k !== "title" });
+    var handled = [];
+    keys.forEach(function(k) {
+      var metaEl = dynamicMeta.filter(function (el) { el.name === k })[0];
       if (metaEl === undefined) {
         // add missing meta element to head
-        let newMeta = document.createElement("meta");
+        var newMeta = document.createElement("meta");
         newMeta.setAttribute("name", k);
         newMeta.setAttribute("content", meta[k]);
         document.head.appendChild(newMeta);
@@ -85,10 +85,10 @@ export function Router(defaultMeta) {
       }
       handled.push(k);
     });
-    keys.forEach(k => {
+    keys.forEach(function(k) {
       if (handled.indexOf(k) === -1) {
         // remove meta from document
-        let metaEl = dynamicMeta.filter(el => el.name === k)[0];
+        var metaEl = dynamicMeta.filter(function (el) { el.name === k })[0];
         document.head.removeChild(metaEl);
       }
     });

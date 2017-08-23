@@ -1,4 +1,4 @@
-import { h } from "hyperapp"
+import { h } from "@ajces/idiom"
 
 export function Link(props, children) {
   props.href = props.to
