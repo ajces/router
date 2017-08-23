@@ -1,171 +1,49 @@
-# @hyperapp/router
-[![Travis CI](https://img.shields.io/travis/hyperapp/router/master.svg)](https://travis-ci.org/hyperapp/router)
-[![Codecov](https://img.shields.io/codecov/c/github/hyperapp/router/master.svg)](https://codecov.io/gh/hyperapp/router)
-[![npm](https://img.shields.io/npm/v/@hyperapp/router.svg)](https://www.npmjs.org/package/hyperapp)
-[![Slack](https://hyperappjs.herokuapp.com/badge.svg)](https://hyperappjs.herokuapp.com "Join us")
+# AJCES router fork of @hyperapp/router
+The main difference being the addition of meta tag diffing on route changes, using array of route objects [{path, view, meta}] instead of array of arrays which I feel is clearer in the code and I will also be adding async routing soon via an async view helper function which will provide functionality similar to react-loadable...
 
-@hyperapp/router provides utilities for routing client-side pages with [Hyperapp](https://github.com/hyperapp/hyperapp) using the [History API](https://developer.mozilla.org/en-US/docs/Web/API/History).
+The defaultMeta provided to the Router mixin will allow defaults for routes that choose not to specify a meta value, anything supplied to a route meta object will be merged with defaultMeta via Object.assign({}, defaultMeta, view.meta)
 
-[Try it Online](http://hyperapp-router.surge.sh)
+There are meta tags that cause bugs in certain browsers if modified after page load, these are skipped in our meta dom diff to avoid issues: origin, referrer, viewport. ( any other key value pair should work in the meta object )
 
 ```jsx
-import { Router, Link } from "@hyperapp/router"
+import { Router, Link } from "@ajces/router"
 
 app({
   view: [
-    [
-      "/",
-      (state, actions) =>
+    {
+      path: "/",
+      view: (state, actions) =>
         <Link to="/test" go={actions.router.go}>
           Test
-        </Link>
-    ],
-    [
-      "/test",
-      (state, actions) =>
+        </Link>,
+      meta: {
+        title: "Idiom - Router",
+        description: "SEO description for Idiom Router"
+      }
+    },
+    {
+      path: "/test",
+      view: (state, actions) =>
         <Link to="/" go={actions.router.go}>
           Back
-        </Link>
-    ]
+        </Link>,
+      meta: {
+        title: "Test",
+        description: "SEO test",
+        keywords: "comma,delimited,list"
+      }
+    }
   ],
-  mixins: [Router]
+  mixins: [Router({
+    title: "AJCES - Router",
+    description: "AJCES customized fork of @hyperapp/router",
+    author: "Andy Johnson",
+    keywords: "idiom,router,hyperapp,meta,async"
+  })]
 })
 ```
-
-## Installation
-
-Download the minified library from a [CDN](https://unpkg.com/@hyperapp/router).
-
-```html
-<script src="https://unpkg.com/@hyperapp/router"></script>
-```
-
-Then import from `Router`.
-
-```jsx
-const { Router, Link } = Router
-```
-
-Or install with npm / Yarn.
-
-<pre>
-npm i <a href="https://www.npmjs.com/package/@hyperapp/router">@hyperapp/router</a>
-</pre>
-
-Then [bundle](https://github.com/hyperapp/hyperapp/blob/master/docs/getting-started.md#build-pipeline) and use as you would any other module.
-
-```jsx
-import { Router, Link } from "@hyperapp/router"
-```
-
-## Router
-
-Use the Router as any other [mixin](https://github.com/hyperapp/hyperapp/blob/master/docs/mixins.md). Then compose your view as an array of [routes](#routes).
-
-```jsx
-app({
-  view: [
-    ["/", state => <h1>Hi.</h1>]
-    ["*", state => <h1>404</h1>],
-  ],
-  mixins: [Router]
-})
-```
-
-### Routes
-
-A route is a tuple that consists of a [path](#paths) and a [view](https://github.com/hyperapp/hyperapp/blob/master/docs/view.md).
-
-<pre>
-[string, <a href="https://github.com/hyperapp/hyperapp/blob/master/docs/api.md#view">View</a>]
-</pre>
-
-Routes are matched in the following three scenarios:
-
-- After the page is loaded.
-- When the browser fires a [popstate](https://developer.mozilla.org/en-US/docs/Web/Events/popstate) event.
-- When [actions.router.go](#actionsroutergo) is called.
-
-If [location.pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location) matches the path of a supplied route, we'll render its view.
-
-### Paths
-
-#### `/`, `/foo`
-
-Match if location.pathname is `/`, `/foo`, etc.
-
-#### `/:key`
-
-Match location.pathname using `[A-Za-z0-9]+` and save the matched path to [state.router.params](#staterouterparams).
-
-#### `*`
-
-Match anything. Declaration order dictates matching precedence. If you are using `*`, declare it last.
-
-### state.router.match
-
-The matched path.
-
-<pre>
-string
-</pre>
-
-### state.router.params
-
-The matched path params.
-
-<pre>
-{
-  [key]: string
-}
-</pre>
-
-|path                 |location.pathname    |state.router.params  |
-|----------------------|---------------------|---------------------|
-|`/:foo`               |/hyper               | { foo: "hyper" }    |
-
-### actions.router.go
-
-Update [location.pathname](https://developer.mozilla.org/en-US/docs/Web/API/Location) with the supplied path.
-
-<pre>
-actions.router.go(<a href="#paths">path</a>)
-</pre>
-
-### events.route
-
-Use route to make a network request, parse [location.search](https://developer.mozilla.org/en-US/docs/Web/API/HTMLHyperlinkElementUtils/search), etc. This event is fired when a new route is matched.
-
-<pre>
-<a id="routeevent"></a>route(<a href="#state">State</a>, <a href="#actions">Actions</a>, <a href="#routeinfo">RouteInfo</a>): <a href="#routeinfo">RouteInfo</a>
-</pre>
-
-#### RouteInfo
-
-<pre>
-{
-  match: string,
-  params: any
-}
-</pre>
-
-## Link
-
-Use `Link` to create hyperlinks that map to a [route](#routes).
-
-```jsx
-<Link to="/" go={actions.router.go}>Back Home</Link>
-```
-
-### to
-
-A route [path](#paths).
-
-### go
-
-A function that will be called with the supplied path when the hyperlink is clicked.
 
 ## License
 
-@hyperapp/router is MIT licensed. See [LICENSE](LICENSE.md).
+@ajces/router is MIT licensed. See [LICENSE](LICENSE.md).
 

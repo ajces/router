@@ -1,18 +1,19 @@
 {
-  "name": "@hyperapp/router",
-  "description": "Utilities for routing client-side pages with Hyperapp.",
-  "version": "0.2.3",
+  "name": "@ajces/router",
+  "description": "Utilities for routing client-side pages with Hyperapp/Idiom.",
+  "version": "1.0.0",
   "main": "dist/router.js",
   "jsnext:main": "src/index.js",
   "module": "src/index.js",
   "license": "MIT",
-  "repository": "hyperapp/router",
+  "repository": "https://github.com/ajces/router.git",
   "files": [
     "src",
     "dist"
   ],
-  "author": "Jorge Bucaran",
+  "author": "Andy Johnson",
   "keywords": [
+    "idiom",
     "hyperapp",
     "react",
     "elm",
@@ -21,7 +22,9 @@
     "vdom",
     "hyperx",
     "hyperscript",
-    "router"
+    "router",
+    "meta",
+    "async"
   ],
   "scripts": {
     "test": "jest --coverage --no-cache --testURL https://hyperapp.js.org",
@@ -42,8 +45,5 @@
     "prettier": "~1.5.3",
     "rollup": "^0.47.6",
     "uglify-js": "^2.7.5"
-  },
-  "peerDependencies": {
-    "hyperapp": "^0.12.0"
   }
 }
