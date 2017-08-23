@@ -1,4 +1,4 @@
-declare module "router" {
+declare module "@ajces/router" {
   declare type Emit = (event: string, data: any) => any;
   
   declare type Thunk = () => { [string]: any };

@@ -1,7 +1,7 @@
 {
   "name": "@ajces/router",
   "description": "Utilities for routing client-side pages with Hyperapp/Idiom.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/router.js",
   "jsnext:main": "src/index.js",
   "module": "src/index.js",
