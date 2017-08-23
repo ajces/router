@@ -1,8 +1,8 @@
-import { isServer } from "@ajces/utils"
+import { isServer } from "@ajces/utils";
 
 export function Router(defaultMeta) {
   if (defaultMeta == null) {
-    defaultMeta = {}
+    defaultMeta = {};
   }
 
   return function (emit) { 
@@ -15,9 +15,9 @@ export function Router(defaultMeta) {
           set: function(state, actions, data) {
             if (data.meta != null) {
               if ( !isServer()) {
-                updateMeta(data.meta)
+                updateMeta(data.meta);
               } else {
-                window.meta = meta
+                window.meta = meta;
               }
             }
             return {
@@ -26,10 +26,10 @@ export function Router(defaultMeta) {
           },
           go: function(state, actions, path) {
             if (location.pathname + location.search !== path) {
-              history.pushState({}, "", path)
+              history.pushState({}, "", path);
               actions.router.set({
                 path: path
-              })
+              });
             }
           }
         }
@@ -37,7 +37,7 @@ export function Router(defaultMeta) {
       events: {
         load: function(state, actions) {
           addEventListener("popstate", function() {
-            actions.router.set({})
+            actions.router.set({});
           })
         },
         render: function(state, actions, view) {
@@ -46,7 +46,7 @@ export function Router(defaultMeta) {
               ? state
               : actions.router.set(emit("route", match(location.pathname, view))))
               .router.index
-          ][1]
+          ].view;
         }
       }
     }
@@ -95,14 +95,14 @@ export function Router(defaultMeta) {
   }
 
   function match(pathname, routes) {
-    var match
-    var meta
-    var index
-    var params = {}
+    var match;
+    var meta;
+    var index;
+    var params = {};
 
     for (var i = 0; i < routes.length && !match; i++) {
-      var route = routes[i].path
-      var keys = []
+      var route = routes[i].path;
+      var keys = [];
       pathname.replace(
         RegExp(
           route === "*"
@@ -117,18 +117,18 @@ export function Router(defaultMeta) {
         ),
         function() {
           for (var j = 1; j < arguments.length - 2; ) {
-            var value = arguments[j++]
+            var value = arguments[j++];
             try {
-              value = decodeURI(value)
+              value = decodeURI(value);
             } catch (_) {}
-            params[keys.shift()] = value
+            params[keys.shift()] = value;
           }
 
-          match = route
-          index = i
-          meta = Object.assign({}, defaultMeta, routes[i].meta)
+          match = route;
+          index = i;
+          meta = Object.assign({}, defaultMeta, routes[i].meta);
         }
-      )
+      );
     }
 
     return {
@@ -136,6 +136,6 @@ export function Router(defaultMeta) {
       match: match,
       index: index,
       params: params
-    }
+    };
   }
 }
