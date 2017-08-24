@@ -1,5 +1,3 @@
-import { isServer } from "@ajces/utils";
-
 export function Router(defaultMeta) {
   if (defaultMeta == null) {
     defaultMeta = {};
@@ -14,11 +12,7 @@ export function Router(defaultMeta) {
         router: {
           set: function(state, actions, data) {
             if (data.meta != null) {
-              if ( !isServer()) {
-                updateMeta(data.meta);
-              } else {
-                window.meta = meta;
-              }
+              updateMeta(data.meta);
             }
             return {
               router: data
@@ -53,45 +47,49 @@ export function Router(defaultMeta) {
   }
 
   function updateMeta(meta) {
-    document.title = meta.title;
-    var dynamicMeta = [].filter.call(
-      document.getElementsByTagName("meta"),
-      function(el) {
-        if (
-          el.name === "" ||
-          el.name === "origin" ||
-          el.name === "referrer" ||
-          el.name === "viewport"
-        ) {
-          return false;
-        } else {
-          return true;
+    if (document.getElementsByTagName == null) {
+      window.meta = meta; // hack work around for SSR...
+    } else {
+      document.title = meta.title;
+      var dynamicMeta = [].filter.call(
+        document.getElementsByTagName("meta"),
+        function(el) {
+          if (
+            el.name === "" ||
+            el.name === "origin" ||
+            el.name === "referrer" ||
+            el.name === "viewport"
+          ) {
+            return false;
+          } else {
+            return true;
+          }
         }
-      }
-    );
-    var keys = Object.keys(meta).filter(function(k) { k !== "title" });
-    var handled = [];
-    keys.forEach(function(k) {
-      var metaEl = dynamicMeta.filter(function (el) { el.name === k })[0];
-      if (metaEl === undefined) {
-        // add missing meta element to head
-        var newMeta = document.createElement("meta");
-        newMeta.setAttribute("name", k);
-        newMeta.setAttribute("content", meta[k]);
-        document.head.appendChild(newMeta);
-      } else {
-        // update existing meta element
-        metaEl.setAttribute("content", meta[k]);
-      }
-      handled.push(k);
-    });
-    keys.forEach(function(k) {
-      if (handled.indexOf(k) === -1) {
-        // remove meta from document
+      );
+      var keys = Object.keys(meta).filter(function(k) { k !== "title" });
+      var handled = [];
+      keys.forEach(function(k) {
         var metaEl = dynamicMeta.filter(function (el) { el.name === k })[0];
-        document.head.removeChild(metaEl);
-      }
-    });
+        if (metaEl === undefined) {
+          // add missing meta element to head
+          var newMeta = document.createElement("meta");
+          newMeta.setAttribute("name", k);
+          newMeta.setAttribute("content", meta[k]);
+          document.head.appendChild(newMeta);
+        } else {
+          // update existing meta element
+          metaEl.setAttribute("content", meta[k]);
+        }
+        handled.push(k);
+      });
+      keys.forEach(function(k) {
+        if (handled.indexOf(k) === -1) {
+          // remove meta from document
+          var metaEl = dynamicMeta.filter(function (el) { el.name === k })[0];
+          document.head.removeChild(metaEl);
+        }
+      });
+    }
   }
 
   function match(pathname, routes) {

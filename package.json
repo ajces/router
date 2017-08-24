@@ -1,7 +1,7 @@
 {
   "name": "@ajces/router",
   "description": "Utilities for routing client-side pages with Hyperapp/Idiom.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "dist/router.js",
   "jsnext:main": "src/index.js",
   "module": "src/index.js",
@@ -47,10 +47,6 @@
     "uglify-js": "^2.7.5"
   },
   "peerDependencies": {
-    "@ajces/utils": "^1.0.0",
     "@ajces/idiom": "^1.0.1"
-  },
-  "dependencies": {
-    "@ajces/utils": "^1.0.0"
   }
 }
