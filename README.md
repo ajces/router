@@ -6,7 +6,7 @@ The defaultMeta provided to the Router mixin will allow defaults for routes that
 There are meta tags that cause bugs in certain browsers if modified after page load, these are skipped in our meta dom diff to avoid issues: origin, referrer, viewport. ( any other key value pair should work in the meta object )
 
 ```jsx
-import { Router, Link } from "@ajces/router"
+import { router, Link } from "@ajces/router"
 
 app({
   view: [
@@ -34,7 +34,7 @@ app({
       }
     }
   ],
-  mixins: [Router({
+  mixins: [router({
     title: "AJCES - Router",
     description: "AJCES customized fork of @hyperapp/router",
     author: "Andy Johnson",

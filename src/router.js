@@ -1,4 +1,4 @@
-export function Router(defaultMeta) {
+export function router(defaultMeta) {
   if (defaultMeta == null) {
     defaultMeta = {};
   }
