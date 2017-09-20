@@ -1,3 +1,4 @@
+/*
 import { h, app } from "hyperapp"
 import { Router } from "../src"
 
@@ -403,4 +404,4 @@ test("fire route only if path changes", done => {
     mixins: [Router]
   })
 })
-
+*/
