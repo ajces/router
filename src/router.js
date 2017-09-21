@@ -46,7 +46,7 @@ export function updateMeta(meta) {
   });
 }
 
-export function Router(config, defaultMeta) {
+export function RouteMatcher(config, defaultMeta) {
   config.forEach(route => {
     route.meta = Object.assign({}, defaultMeta, route.meta);
   });
