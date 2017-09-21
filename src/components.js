@@ -1,14 +1,14 @@
 import { h } from "hyperapp";
 
-import { Matcher, updateMeta } from "./matcher";
-// <Router name="root" meta={defaultMeta} statePath={[path, to, pathname], state={state}}>...</Router>
-const routers = {}; // so a page can have multiple routers...  non-nested...?
-export function Router({ name, meta, pathname }, children) {
-  if (routers[name] === undefined) {
-    routers[name] = Matcher(children, meta);
+import { Matcher } from "./matcher";
+// <Router meta={defaultMeta} pathname={router.path}, updateMeta={updateMeta}}>...</Router>
+let router; // simplify and just have 1 router for now...
+export function Router({ name, meta, pathname, updateMeta }, children) {
+  if (router === undefined) {
+    router = Matcher(children, meta);
   }
-  const match = routers[name].match(pathname);
-  if (match.meta !== {}) {
+  const match = router.match(pathname);
+  if (match.meta !== {} && updateMeta !== undefined) {
     updateMeta(match.meta);
   }
   return match.component(match.params);
