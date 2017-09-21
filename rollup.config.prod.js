@@ -9,7 +9,13 @@ export default {
     format: "umd"
   },
   sourcemap: true,
-  plugins: [babel(), minify({ comments: false })],
+  plugins: [
+    babel({
+      presets: [["es2015", { modules: false }]],
+      plugins: []
+    }),
+    minify({ comments: false })
+  ],
   globals: {},
   external: []
 };

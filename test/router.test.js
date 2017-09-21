@@ -1,21 +1,36 @@
-/*
-import { h, app } from "hyperapp"
-import { Router } from "../src"
+import test from "ava";
+import { h, app } from "hyperapp";
+import { router } from "../src/router";
 
-window.requestAnimationFrame = setTimeout
+require("undom/register");
 
+global.window = { location: {} };
+window.requestAnimationFrame = setTimeout;
+global.addEventListener = () => {};
 Object.defineProperty(window.location, "pathname", {
   writable: true
-})
+});
 
-beforeEach(() => {
-  document.body.innerHTML = ""
-  location.pathname = "/"
-  history.pushState = function(state, title, url) {
-    location.pathname = url
-  }
-})
+test.beforeEach(t => {
+  document.body.innerHTML = "";
+  window.location.pathname = "/";
+  global.location = window.location;
+});
 
+test("router actions should be available with mixin applied", t => {
+  app({
+    actions: {},
+    events: {
+      load: (state, actions, node) => {
+        t.is(typeof actions.router.go === "function", true);
+        t.is(typeof actions.router.set === "function", true);
+      }
+    },
+    mixins: [router()]
+  });
+});
+
+/*
 test("/", done => {
   app({
     view: [

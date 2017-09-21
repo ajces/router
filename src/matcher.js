@@ -89,7 +89,6 @@ export function Matcher(config, defaultMeta) {
       }
 
       return {
-        pathname,
         match,
         meta,
         component,

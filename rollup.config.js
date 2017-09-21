@@ -8,7 +8,12 @@ export default {
     format: "umd"
   },
   sourcemap: true,
-  plugins: [babel()],
+  plugins: [
+    babel({
+      presets: [["es2015", { modules: false }]],
+      plugins: []
+    })
+  ],
   globals: {},
   external: []
 };
