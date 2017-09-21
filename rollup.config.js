@@ -1,3 +1,5 @@
+import babel from "rollup-plugin-babel";
+
 export default {
   input: "./src/index.js",
   name: "router",
@@ -6,7 +8,7 @@ export default {
     format: "umd"
   },
   sourcemap: true,
-  plugins: [],
+  plugins: [babel()],
   globals: {},
   external: []
 };

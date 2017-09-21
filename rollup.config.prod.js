@@ -1,4 +1,5 @@
 import minify from "rollup-plugin-babel-minify";
+import babel from "rollup-plugin-babel";
 
 export default {
   input: "./src/index.js",
@@ -8,7 +9,7 @@ export default {
     format: "umd"
   },
   sourcemap: true,
-  plugins: [minify({ comments: false })],
+  plugins: [babel(), minify({ comments: false })],
   globals: {},
   external: []
 };
