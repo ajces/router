@@ -6,7 +6,10 @@ require("undom/register");
 
 global.window = { location: {} };
 window.requestAnimationFrame = setTimeout;
-global.addEventListener = () => {};
+const handlers = {};
+global.addEventListener = (name, fn) => {
+  handlers[name] = fn;
+};
 Object.defineProperty(window.location, "pathname", {
   writable: true
 });
@@ -15,19 +18,89 @@ test.beforeEach(t => {
   document.body.innerHTML = "";
   window.location.pathname = "/";
   global.location = window.location;
+  global.history = {};
+  Object.keys(handlers).forEach(key => {
+    delete handlers[key];
+  });
 });
 
 test("router actions should be available with mixin applied", t => {
   app({
-    actions: {},
     events: {
-      load: (state, actions, node) => {
+      load: (state, actions) => {
         t.is(typeof actions.router.go === "function", true);
         t.is(typeof actions.router.set === "function", true);
       }
     },
     mixins: [router()]
   });
+});
+
+test("set should properly set state.router.path", t => {
+  app({
+    events: {
+      load: (state, actions) => {
+        actions.router.set({ path: "/test" });
+      },
+      update: (state, actions, data) => {
+        t.deepEqual(data, {
+          router: {
+            path: "/test"
+          }
+        });
+      }
+    },
+    mixins: [router()]
+  });
+});
+
+test("go should properly trigger set when pathname changed", t => {
+  location.pathname = "/";
+  location.search = "";
+
+  let pushStateCount = 0;
+  let lastPath;
+  history.pushState = (state, title, path) => {
+    lastPath = path;
+    pushStateCount++;
+  };
+
+  let updateCount = 0;
+  const emit = app({
+    events: {
+      update: (state, actions, data) => {
+        updateCount++;
+      },
+      go: (state, actions, path) => {
+        actions.router.go(path);
+      }
+    },
+    mixins: [router()]
+  });
+
+  emit("go", "/");
+  t.is(updateCount, 0);
+  t.is(pushStateCount, 0);
+
+  emit("go", "/home");
+  t.is(updateCount, 1);
+  t.is(pushStateCount, 1);
+  t.is(lastPath, "/home");
+});
+
+test("simulate popstate browser event", t => {
+  const emit = app({
+    events: {
+      test: (state, actions) => {
+        t.is(state.router.path, "/test");
+      }
+    },
+    mixins: [router()]
+  });
+  location.pathname = "/test";
+  location.search = "";
+  handlers["popstate"]();
+  emit("test");
 });
 
 /*
