@@ -2,7 +2,7 @@ export function updateMeta(meta) {
   document.title = meta.title;
   const dynamicMeta = [].filter.call(
     document.getElementsByTagName("meta"),
-    el => {
+    function(el) {
       if (
         el.name === "" ||
         el.name === "origin" ||
@@ -15,12 +15,12 @@ export function updateMeta(meta) {
       }
     }
   );
-  const keys = Object.keys(meta).filter(k => {
+  const keys = Object.keys(meta).filter(function(k) {
     k !== "title";
   });
   const handled = [];
   keys.forEach(function(k) {
-    const metaEl = dynamicMeta.filter(el => {
+    const metaEl = dynamicMeta.filter(function(el) {
       el.name === k;
     })[0];
     if (metaEl === undefined) {
@@ -38,7 +38,7 @@ export function updateMeta(meta) {
   keys.forEach(function(k) {
     if (handled.indexOf(k) === -1) {
       // remove meta from document
-      const metaEl = dynamicMeta.filter(el => {
+      const metaEl = dynamicMeta.filter(function(el) {
         el.name === k;
       })[0];
       document.head.removeChild(metaEl);
@@ -47,7 +47,7 @@ export function updateMeta(meta) {
 }
 
 export function Router(config, defaultMeta) {
-  config.forEach(route => {
+  config.forEach(function(route) {
     route.meta = Object.assign({}, defaultMeta, route.meta);
   });
   return {
