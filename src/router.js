@@ -2,7 +2,7 @@ export function updateMeta(meta) {
   document.title = meta.title;
   const dynamicMeta = [].filter.call(
     document.getElementsByTagName("meta"),
-    function(el) {
+    el => {
       if (
         el.name === "" ||
         el.name === "origin" ||
@@ -15,12 +15,12 @@ export function updateMeta(meta) {
       }
     }
   );
-  const keys = Object.keys(meta).filter(function(k) {
+  const keys = Object.keys(meta).filter(k => {
     k !== "title";
   });
   const handled = [];
   keys.forEach(function(k) {
-    const metaEl = dynamicMeta.filter(function(el) {
+    const metaEl = dynamicMeta.filter(el => {
       el.name === k;
     })[0];
     if (metaEl === undefined) {
@@ -38,7 +38,7 @@ export function updateMeta(meta) {
   keys.forEach(function(k) {
     if (handled.indexOf(k) === -1) {
       // remove meta from document
-      const metaEl = dynamicMeta.filter(function(el) {
+      const metaEl = dynamicMeta.filter(el => {
         el.name === k;
       })[0];
       document.head.removeChild(metaEl);
@@ -47,11 +47,11 @@ export function updateMeta(meta) {
 }
 
 export function Router(config, defaultMeta) {
-  config.forEach(function(route) {
+  config.forEach(route => {
     route.meta = Object.assign({}, defaultMeta, route.meta);
   });
   return {
-    match: function(pathname) {
+    match: pathname => {
       var match;
       var meta;
       var component;
@@ -65,12 +65,10 @@ export function Router(config, defaultMeta) {
             route === "*"
               ? ".*"
               : "^" +
-                route
-                  .replace(/\//g, "\\/")
-                  .replace(/:([\w]+)/g, function(_, key) {
-                    keys.push(key);
-                    return "([-\\.%\\w\\(\\)]+)";
-                  }) +
+                route.replace(/\//g, "\\/").replace(/:([\w]+)/g, (_, key) => {
+                  keys.push(key);
+                  return "([-\\.%\\w\\(\\)]+)";
+                }) +
                 "/?$",
             "g"
           ),
@@ -91,11 +89,11 @@ export function Router(config, defaultMeta) {
       }
 
       return {
-        pathname: pathname,
-        match: match,
-        meta: meta,
-        component: component,
-        params: params
+        pathname,
+        match,
+        meta,
+        component,
+        params
       };
     }
   };
