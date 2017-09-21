@@ -72,7 +72,7 @@ test("updateMeta should properly diff/patch meta tags...", t => {
     referrer: "pow",
     viewport: "bang"
   };
-  updateMeta(removeMeta);
+  updateMeta(invalidMeta);
   testMeta(t, removeMeta);
   updateMeta({});
   testMeta(t, {});
