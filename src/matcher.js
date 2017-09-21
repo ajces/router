@@ -11,6 +11,8 @@ function getNameAndContent(el) {
   return res;
 }
 
+const invalidMeta = ["", "origin", "referrer", "viewport"];
+
 export function updateMeta(meta) {
   document.title = meta.title;
 
@@ -18,19 +20,16 @@ export function updateMeta(meta) {
     document.getElementsByTagName("meta"),
     el => {
       const pair = getNameAndContent(el);
-      if (
-        pair.name === "" ||
-        pair.name === "origin" ||
-        pair.name === "referrer" ||
-        pair.name === "viewport"
-      ) {
+      if (invalidMeta.indexOf(pair.name) > -1) {
         return false;
       } else {
         return true;
       }
     }
   );
-  const keys = Object.keys(meta).filter(k => k !== "title");
+  const keys = Object.keys(meta).filter(k => {
+    return k !== "title" && invalidMeta.indexOf(k) === -1;
+  });
   const handled = [];
   keys.forEach(function(k) {
     const metaEl = dynamicMeta.filter(el => {
@@ -51,7 +50,10 @@ export function updateMeta(meta) {
   });
   dynamicMeta.forEach(el => {
     const pair = getNameAndContent(el);
-    if (handled.indexOf(pair.name) === -1) {
+    if (
+      handled.indexOf(pair.name) === -1 &&
+      invalidMeta.indexOf(pair.name) === -1
+    ) {
       document.head.removeChild(el);
     }
   });

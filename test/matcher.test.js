@@ -27,12 +27,18 @@ const config = [
   }
 ];
 
+const refMeta = {
+  referrer: "no-referrer"
+};
+
+const defaultTestMeta = Object.assign({}, defaultMeta, refMeta);
+
 function buildTestMeta() {
   document.head = document.createElement("head");
-  Object.keys(defaultMeta).forEach(key => {
+  Object.keys(defaultTestMeta).forEach(key => {
     const newMeta = document.createElement("meta");
     newMeta.setAttribute("name", key);
-    newMeta.setAttribute("content", defaultMeta[key]);
+    newMeta.setAttribute("content", defaultTestMeta[key]);
     document.head.appendChild(newMeta);
   });
 }
@@ -57,34 +63,34 @@ function testMeta(t, expected) {
         content = attr.value;
       }
     });
-    console.log(`${name}: ${content} === ${expected[name]}`);
     t.is(content, expected[name]);
   });
 }
 
 test("updateMeta should properly diff/patch meta tags...", t => {
   buildTestMeta();
-  testMeta(t, defaultMeta);
+  testMeta(t, defaultTestMeta);
   const changedMeta = {
     author: "Andy Johnson",
     keywords: "a b c"
   };
   updateMeta(changedMeta);
-  testMeta(t, changedMeta);
+  testMeta(t, Object.assign({}, changedMeta, refMeta));
   const removeMeta = {
     author: "Jon Doe"
   };
   updateMeta(removeMeta);
-  testMeta(t, removeMeta);
+  testMeta(t, Object.assign({}, removeMeta, refMeta));
   const invalidMeta = {
+    author: "Jon Doe",
     origin: "bam",
     referrer: "pow",
     viewport: "bang"
   };
   updateMeta(invalidMeta);
-  testMeta(t, removeMeta);
+  testMeta(t, Object.assign({}, removeMeta, refMeta));
   updateMeta({});
-  testMeta(t, {});
+  testMeta(t, Object.assign({}, {}, refMeta));
 });
 
 test("matcher should return proper route object", t => {
