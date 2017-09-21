@@ -91,11 +91,11 @@ export function Router(config, defaultMeta) {
       }
 
       return {
-        pathname,
-        match,
-        meta,
-        component,
-        params
+        pathname: pathname,
+        match: match,
+        meta: meta,
+        component: component,
+        params: params
       };
     }
   };
