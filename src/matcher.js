@@ -1,13 +1,28 @@
+function getNameAndContent(el) {
+  let res = {};
+  el.attributes.forEach(attr => {
+    if (attr.name === "name") {
+      res.name = attr.value;
+    }
+    if (attr.name === "content") {
+      res.content = attr.value;
+    }
+  });
+  return res;
+}
+
 export function updateMeta(meta) {
   document.title = meta.title;
+
   const dynamicMeta = [].filter.call(
     document.getElementsByTagName("meta"),
     el => {
+      const pair = getNameAndContent(el);
       if (
-        el.name === "" ||
-        el.name === "origin" ||
-        el.name === "referrer" ||
-        el.name === "viewport"
+        pair.name === "" ||
+        pair.name === "origin" ||
+        pair.name === "referrer" ||
+        pair.name === "viewport"
       ) {
         return false;
       } else {
@@ -15,13 +30,12 @@ export function updateMeta(meta) {
       }
     }
   );
-  const keys = Object.keys(meta).filter(k => {
-    k !== "title";
-  });
+  const keys = Object.keys(meta).filter(k => k !== "title");
   const handled = [];
   keys.forEach(function(k) {
     const metaEl = dynamicMeta.filter(el => {
-      el.name === k;
+      const pair = getNameAndContent(el);
+      return pair.name === k;
     })[0];
     if (metaEl === undefined) {
       // add missing meta element to head
@@ -35,13 +49,10 @@ export function updateMeta(meta) {
     }
     handled.push(k);
   });
-  keys.forEach(function(k) {
-    if (handled.indexOf(k) === -1) {
-      // remove meta from document
-      const metaEl = dynamicMeta.filter(el => {
-        el.name === k;
-      })[0];
-      document.head.removeChild(metaEl);
+  dynamicMeta.forEach(el => {
+    const pair = getNameAndContent(el);
+    if (handled.indexOf(pair.name) === -1) {
+      document.head.removeChild(el);
     }
   });
 }

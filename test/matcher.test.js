@@ -47,8 +47,17 @@ document.getElementsByTagName = name => {
 
 function testMeta(t, expected) {
   document.head.childNodes.forEach(node => {
-    let name = node.name;
-    let content = node.content;
+    let name;
+    let content;
+    node.attributes.forEach(attr => {
+      if (attr.name === "name") {
+        name = attr.value;
+      }
+      if (attr.name === "content") {
+        content = attr.value;
+      }
+    });
+    console.log(`${name}: ${content} === ${expected[name]}`);
     t.is(content, expected[name]);
   });
 }
