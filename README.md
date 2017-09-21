@@ -23,7 +23,7 @@ app({
           keywords: "hyperapp, routing, router, meta",
           author: "Andy Johnson"
         }
-        pathname={state.router.pathname}
+        pathname={state.router.path}
         updateMeta={updateMeta}
       >
         <Route path="/" meta={{ title: "Home" }} component={props => (
