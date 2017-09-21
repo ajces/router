@@ -23,8 +23,8 @@ export function router(options) {
       },
       events: {
         load: function(state, actions) {
-          addEventListener("popstate", function() {
-            actions.router.set({});
+          addEventListener("popstate", function(event) {
+            actions.router.set({ path: location.pathname + location.search });
           });
         }
       }

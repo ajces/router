@@ -35,7 +35,7 @@ app({
             <Link to="/profile/andy" go={actions.router.go} />
           </div>
         )} />
-        <Route path="/about" meta={{ title: "About" }} component={About} />
+        <Route path="/about" component={About} />
         <Route path="/profile/:user" meta={{ title: "Profile" }} component={Profile} />
       </Router>
       <Footer />
