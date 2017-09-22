@@ -8,7 +8,11 @@ export function Router({ meta, pathname, updateMeta }, children) {
     router = Matcher(children, meta);
   }
   const match = router.match(pathname);
-  if (match.meta !== {} && updateMeta !== undefined) {
+  if (
+    match.meta !== undefined &&
+    match.meta !== {} &&
+    updateMeta !== undefined
+  ) {
     updateMeta(match.meta);
   }
   return match.component(match.params);
