@@ -1,7 +1,7 @@
 {
   "name": "@ajces/router",
   "description": "Utilities for routing client-side pages.",
-  "version": "1.1.5",
+  "version": "2.0.0",
   "main": "dist/router.js",
   "jsnext:main": "src/index.js",
   "module": "src/index.js",
