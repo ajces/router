@@ -41,7 +41,7 @@ test("Router component", t => {
   t.deepEqual(
     Router(
       {
-        meta: { title: "test" },
+        meta: params => ({ title: "test" }),
         pathname: "/",
         updateMeta: () => {}
       },
@@ -57,7 +57,7 @@ test("Router component", t => {
   t.deepEqual(
     Router(
       {
-        meta: {},
+        meta: params => ({}),
         pathname: "/"
       },
       [

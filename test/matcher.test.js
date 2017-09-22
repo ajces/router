@@ -8,22 +8,22 @@ const config = [
   {
     path: "/",
     component: { name: "Home" },
-    meta: { title: "Home" }
+    meta: params => ({ title: "Home" })
   },
   {
     path: "/about",
     component: { name: "About" },
-    meta: { title: "About" }
+    meta: params => ({ title: "About" })
   },
   {
     path: "/profile/:user",
     component: { name: "Profile" },
-    meta: { title: "Profile" }
+    meta: params => ({ title: "Profile" })
   },
   {
     path: "*",
     component: { name: "Error" },
-    meta: { title: "404" }
+    meta: params => ({ title: "404" })
   }
 ];
 

@@ -60,9 +60,11 @@ export function updateMeta(meta) {
 }
 
 export function Matcher(config, defaultMeta) {
+  /*
   config.forEach(route => {
     route.meta = Object.assign({}, defaultMeta, route.meta);
   });
+  */
   return {
     match: pathname => {
       var match;
@@ -96,7 +98,16 @@ export function Matcher(config, defaultMeta) {
 
             match = route;
             component = config[i].component;
-            meta = config[i].meta;
+            let routeMeta;
+            if (
+              config[i].meta !== undefined &&
+              typeof config[i].meta === "function"
+            ) {
+              routeMeta = config[i].meta(params);
+            } else {
+              routeMeta = {};
+            }
+            meta = Object.assign({}, defaultMeta, routeMeta);
           }
         );
       }

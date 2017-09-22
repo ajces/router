@@ -16,7 +16,6 @@ export function Router({ meta, pathname, updateMeta }, children) {
 
 // <Route path="/" component={Home} meta={HomeMeta} />
 export function Route({ path, component, meta }) {
-  meta = meta || {};
   return { path, component, meta };
 }
 

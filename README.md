@@ -26,7 +26,7 @@ app({
         pathname={state.router.path}
         updateMeta={updateMeta}
       >
-        <Route path="/" meta={{ title: "Home" }} component={props => (
+        <Route path="/" meta={params => ({ title: "Home" })} component={props => (
           <div>
             <h1>
               {"HOME!"}
@@ -36,12 +36,11 @@ app({
           </div>
         )} />
         <Route path="/about" component={About} />
-        <Route path="/profile/:user" meta={{ title: "Profile" }} component={Profile} />
+        <Route path="/profile/:user" meta={params => ({ title: `Profile - ${params.user}` })} component={Profile} />
       </Router>
       <Footer />
     </div>
   ),
-  actions: {},
   mixins: [router()]
 });
 ```
