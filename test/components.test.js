@@ -29,9 +29,19 @@ test.beforeEach(t => {
 });
 
 test("Route should return valid match object", t => {
-  const expected = { path: "/", component: {}, meta: { title: "meta" } };
+  const expected = {
+    path: "/",
+    props: {},
+    component: {},
+    meta: { title: "meta" }
+  };
   t.deepEqual(
-    Route({ path: "/", component: {}, meta: { title: "meta" } }),
+    Route({
+      path: "/",
+      props: {},
+      component: {},
+      meta: { title: "meta" }
+    }),
     expected
   );
 });

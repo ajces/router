@@ -71,6 +71,7 @@ export function Matcher(config, defaultMeta) {
       var meta;
       var component;
       var params = {};
+      var props;
 
       for (var i = 0; i < config.length && !match; i++) {
         var route = config[i].path;
@@ -107,16 +108,18 @@ export function Matcher(config, defaultMeta) {
             } else {
               routeMeta = {};
             }
+            props = config[i].props;
             meta = Object.assign({}, defaultMeta, routeMeta);
           }
         );
       }
 
       return {
+        component,
         match,
         meta,
-        component,
-        params
+        params,
+        props
       };
     }
   };

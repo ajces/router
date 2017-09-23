@@ -15,12 +15,15 @@ export function Router({ meta, pathname, updateMeta }, children) {
   ) {
     updateMeta(match.meta);
   }
-  return match.component(match.params);
+  // props for component should be {...match.props, params: match.params}
+  return match.component(
+    Object.assign({}, match.props, { params: match.params })
+  );
 }
 
 // <Route path="/" component={Home} meta={HomeMeta} />
-export function Route({ path, component, meta }) {
-  return { path, component, meta };
+export function Route({ path, props, component, meta }) {
+  return { path, props, component, meta };
 }
 
 // <Link to="/">...</Link>

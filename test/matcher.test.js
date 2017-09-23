@@ -8,16 +8,19 @@ const config = [
   {
     path: "/",
     component: { name: "Home" },
+    props: {},
     meta: params => ({ title: "Home" })
   },
   {
     path: "/about",
     component: { name: "About" },
+    props: {},
     meta: params => ({ title: "About" })
   },
   {
     path: "/profile/:user",
     component: { name: "Profile" },
+    props: {},
     meta: params => ({ title: "Profile" })
   },
   {
@@ -102,7 +105,8 @@ test("matcher should return proper route object", t => {
       title: "Home",
       keywords: "one, two, three"
     },
-    params: {}
+    params: {},
+    props: {}
   });
 
   t.deepEqual(matcher.match("/about"), {
@@ -112,7 +116,8 @@ test("matcher should return proper route object", t => {
       title: "About",
       keywords: "one, two, three"
     },
-    params: {}
+    params: {},
+    props: {}
   });
 
   t.deepEqual(matcher.match("/profile/andy"), {
@@ -122,7 +127,8 @@ test("matcher should return proper route object", t => {
       title: "Profile",
       keywords: "one, two, three"
     },
-    params: { user: "andy" }
+    params: { user: "andy" },
+    props: {}
   });
 
   t.deepEqual(matcher.match("/404"), {
@@ -132,6 +138,7 @@ test("matcher should return proper route object", t => {
       title: "404",
       keywords: "one, two, three"
     },
-    params: {}
+    params: {},
+    props: undefined
   });
 });
