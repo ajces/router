@@ -105,6 +105,7 @@ test("matcher should return proper route object", t => {
       title: "Home",
       keywords: "one, two, three"
     },
+    onroute: undefined,
     params: {},
     props: {}
   });
@@ -116,6 +117,7 @@ test("matcher should return proper route object", t => {
       title: "About",
       keywords: "one, two, three"
     },
+    onroute: undefined,
     params: {},
     props: {}
   });
@@ -127,6 +129,7 @@ test("matcher should return proper route object", t => {
       title: "Profile",
       keywords: "one, two, three"
     },
+    onroute: undefined,
     params: { user: "andy" },
     props: {}
   });
@@ -138,6 +141,7 @@ test("matcher should return proper route object", t => {
       title: "404",
       keywords: "one, two, three"
     },
+    onroute: undefined,
     params: {},
     props: undefined
   });

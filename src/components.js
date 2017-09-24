@@ -12,6 +12,13 @@ export function Router({ meta, pathname, updateMeta }, children) {
   ) {
     updateMeta(match.meta);
   }
+
+  let prunedMatch = Object.assign({}, match);
+  delete prunedMatch.onroute;
+  if (match.onroute) {
+    match.onroute(prunedMatch);
+  }
+
   // props for component should be {...match.props, params: match.params}
   return match.component(
     Object.assign({}, match.props, { params: match.params })
@@ -19,10 +26,10 @@ export function Router({ meta, pathname, updateMeta }, children) {
 }
 
 // <Route path="/" component={Home} meta={HomeMeta} />
-export function Route({ path, props, component, meta }, children) {
+export function Route({ path, props, component, meta, onroute }, children) {
   const result = [];
   if (component) {
-    result.unshift({ path, props, component, meta });
+    result.unshift({ path, props, component, meta, onroute });
   }
   if (children) {
     const flatChildren = children.reduce((a, b) => a.concat(b), []);

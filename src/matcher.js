@@ -60,17 +60,13 @@ export function updateMeta(meta) {
 }
 
 export function Matcher(config, defaultMeta) {
-  /*
-  config.forEach(route => {
-    route.meta = Object.assign({}, defaultMeta, route.meta);
-  });
-  */
   return {
     match: pathname => {
       var match;
       var meta;
       var component;
       var params = {};
+      var onroute;
       var props;
 
       for (var i = 0; i < config.length && !match; i++) {
@@ -109,6 +105,7 @@ export function Matcher(config, defaultMeta) {
               routeMeta = {};
             }
             props = config[i].props;
+            onroute = config[i].onroute;
             meta = Object.assign({}, defaultMeta, routeMeta);
           }
         );
@@ -118,6 +115,7 @@ export function Matcher(config, defaultMeta) {
         component,
         match,
         meta,
+        onroute,
         params,
         props
       };

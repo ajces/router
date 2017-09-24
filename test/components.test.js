@@ -33,6 +33,7 @@ test("Route should return valid match object", t => {
     {
       path: "/",
       props: {},
+      onroute: {},
       component: {},
       meta: { title: "meta" }
     }
@@ -40,6 +41,7 @@ test("Route should return valid match object", t => {
   const r = Route({
     path: "/",
     props: {},
+    onroute: {},
     component: {},
     meta: { title: "meta" }
   });
@@ -51,12 +53,14 @@ test("Route should return valid match object when using nested Routes", t => {
     {
       path: "/test/foo",
       props: {},
+      onroute: {},
       component: {},
       meta: {}
     },
     {
       path: "/test/bar",
       props: {},
+      onroute: {},
       component: {},
       meta: {}
     }
@@ -69,12 +73,14 @@ test("Route should return valid match object when using nested Routes", t => {
       Route({
         path: "/foo",
         props: {},
+        onroute: {},
         component: {},
         meta: {}
       }),
       Route({
         path: "/bar",
         props: {},
+        onroute: {},
         component: {},
         meta: {}
       })
@@ -154,5 +160,23 @@ test("Link component", t => {
   testLink.data.onclick(testEvent);
   t.is(count, 1);
   testLink.data.onclick(failEvent);
+  t.is(count, 1);
+});
+
+test("Router should call Route.onroute if specified", t => {
+  let count = 0;
+  const fn = match => count++;
+  Router(
+    {
+      pathname: "/"
+    },
+    [
+      Route({
+        path: "/",
+        onroute: fn,
+        component: () => ({ name: "Home" })
+      })
+    ]
+  );
   t.is(count, 1);
 });
