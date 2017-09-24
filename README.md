@@ -8,7 +8,7 @@ There are meta tags that cause bugs in certain browsers if modified after page l
 ```jsx
 import { h, app } from "hyperapp";
 import { router, updateMeta, Link, Router, Route } from "@ajces/router";
-import { Header, Nav, Footer, About, Profile } from "./components";
+import { Header, Nav, Footer, About, Profile, Nested, NestedRoutes } from "./components";
 
 app({
   state: { count: 0 },
@@ -35,8 +35,11 @@ app({
             <Link to="/profile/andy" go={actions.router.go} />
           </div>
         )} />
-        <Route path="/about" component={About} />
+        <Route path="/about" onroute={match => console.log(match)} component={About} />
         <Route path="/profile/:user" meta={params => ({ title: `Profile - ${params.user}` })} component={Profile} />
+        <Route path="/nested" component={Nested}>
+          <Route path="/routes" onroute={match => console.log("matched path /nested/routes")} component={NestedRoutes}>
+        </Route>
       </Router>
       <Footer />
     </div>
