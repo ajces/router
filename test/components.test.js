@@ -29,21 +29,58 @@ test.beforeEach(t => {
 });
 
 test("Route should return valid match object", t => {
-  const expected = {
-    path: "/",
-    props: {},
-    component: {},
-    meta: { title: "meta" }
-  };
-  t.deepEqual(
-    Route({
+  const expected = [
+    {
       path: "/",
       props: {},
       component: {},
       meta: { title: "meta" }
-    }),
-    expected
+    }
+  ];
+  const r = Route({
+    path: "/",
+    props: {},
+    component: {},
+    meta: { title: "meta" }
+  });
+  t.deepEqual(r, expected);
+});
+
+test("Route should return valid match object when using nested Routes", t => {
+  const expected = [
+    {
+      path: "/test/foo",
+      props: {},
+      component: {},
+      meta: {}
+    },
+    {
+      path: "/test/bar",
+      props: {},
+      component: {},
+      meta: {}
+    }
+  ];
+  const r = Route(
+    {
+      path: "/test"
+    },
+    [
+      Route({
+        path: "/foo",
+        props: {},
+        component: {},
+        meta: {}
+      }),
+      Route({
+        path: "/bar",
+        props: {},
+        component: {},
+        meta: {}
+      })
+    ]
   );
+  t.deepEqual(r, expected);
 });
 
 test("Router component", t => {

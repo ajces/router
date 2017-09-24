@@ -1,9 +1,10 @@
 import { h } from "hyperapp";
-
 import { Matcher } from "./matcher";
+
 // <Router meta={defaultMeta} pathname={router.path}, updateMeta={updateMeta}}>...</Router>
 export function Router({ meta, pathname, updateMeta }, children) {
-  const match = Matcher(children, meta).match(pathname);
+  const flatChildren = children.reduce((a, b) => a.concat(b), []);
+  const match = Matcher(flatChildren, meta).match(pathname);
   if (
     match.meta !== undefined &&
     match.meta !== {} &&
@@ -18,8 +19,20 @@ export function Router({ meta, pathname, updateMeta }, children) {
 }
 
 // <Route path="/" component={Home} meta={HomeMeta} />
-export function Route({ path, props, component, meta }) {
-  return { path, props, component, meta };
+export function Route({ path, props, component, meta }, children) {
+  const result = [];
+  if (component) {
+    result.unshift({ path, props, component, meta });
+  }
+  if (children) {
+    const flatChildren = children.reduce((a, b) => a.concat(b), []);
+    for (let i = flatChildren.length - 1; i > -1; i--) {
+      const child = flatChildren[i];
+      child.path = path + child.path;
+      result.unshift(child);
+    }
+  }
+  return result;
 }
 
 // <Link to="/">...</Link>
