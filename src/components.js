@@ -2,12 +2,8 @@ import { h } from "hyperapp";
 
 import { Matcher } from "./matcher";
 // <Router meta={defaultMeta} pathname={router.path}, updateMeta={updateMeta}}>...</Router>
-let router; // simplify and just have 1 router for now...
 export function Router({ meta, pathname, updateMeta }, children) {
-  if (router === undefined) {
-    router = Matcher(children, meta);
-  }
-  const match = router.match(pathname);
+  const match = Matcher(children, meta).match(pathname);
   if (
     match.meta !== undefined &&
     match.meta !== {} &&
