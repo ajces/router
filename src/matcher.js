@@ -1,6 +1,6 @@
 function getNameAndContent(el) {
   let res = {};
-  el.attributes.forEach(attr => {
+  [].forEach.call(el.attributes, attr => {
     if (attr.name === "name") {
       res.name = attr.value;
     }
