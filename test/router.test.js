@@ -42,10 +42,15 @@ test("set should properly set state.router.path", t => {
     routerApp({
       hooks: [
         (state, actions) => {
+          console.log("load");
           actions.router.set({ path: "/test" });
-          return function() {
+          return function(info) {
+            console.log("why the fuck does this never get called?");
+            console.log("action");
             return function() {
+              console.log("resolve");
               return function(data) {
+                console.log(data);
                 t.deepEqual(data, {
                   router: {
                     path: "/test"

@@ -1,6 +1,6 @@
 export function router() {
   return {
-    state: { path: location.pathname + location.search },
+    state: { path: location.pathname },
     actions: {
       set: function(state, actions, data) {
         return {
