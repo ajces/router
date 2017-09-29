@@ -131,7 +131,7 @@ test("Link component", t => {
   };
   const expected = {
     tag: "a",
-    data: {
+    props: {
       to: null,
       href: "/",
       go,
@@ -154,12 +154,12 @@ test("Link component", t => {
   };
   const testLink = Link({ to: "/", go }, []);
   t.deepEqual(
-    Object.keys(testLink.data).sort(),
-    Object.keys(expected.data).sort()
+    Object.keys(testLink.props).sort(),
+    Object.keys(expected.props).sort()
   );
-  testLink.data.onclick(testEvent);
+  testLink.props.onclick(testEvent);
   t.is(count, 1);
-  testLink.data.onclick(failEvent);
+  testLink.props.onclick(failEvent);
   t.is(count, 1);
 });
 

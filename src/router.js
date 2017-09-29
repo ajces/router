@@ -1,46 +1,53 @@
-export const router = {
-  state: {
-    router: { path: location.pathname + location.search }
-  },
-  actions: {
-    set: function(state, actions, data) {
-      return {
-        router: data
-      };
+export function router() {
+  return {
+    state: { path: location.pathname + location.search },
+    actions: {
+      set: function(state, actions, data) {
+        return {
+          router: data
+        };
+      },
+      go: function(state, actions, path) {
+        if (location.pathname + location.search !== path) {
+          history.pushState({}, "", path);
+          actions.router.set({
+            path: path
+          });
+        }
+      }
     },
-    go: function(state, actions, path) {
-      if (location.pathname + location.search !== path) {
-        history.pushState({}, "", path);
-        actions.router.set({
-          path: path
+    hooks: [
+      function(state, actions) {
+        addEventListener("popstate", function(event) {
+          actions.router.set({ path: location.pathname + location.search });
         });
       }
-    }
-  },
-  hooks: [
-    function(state, actions) {
-      addEventListener("popstate", function(event) {
-        actions.router.set({ path: location.pathname + location.search });
-      });
-    }
-  ]
+    ]
+  };
 };
 
 export function routerApp(props) {
+  var r = router();
   if (props.hooks !== undefined) {
-    props.hooks.concat(router.hooks);
+    props.hooks.concat(r.hooks);
   } else {
-    props.hooks = router.hooks;
+    props.hooks = r.hooks;
   }
 
-  if (props.state.router === undefined) {
-    props.state.router = router.state;
+  if (props.state !== undefined) {
+    if (props.state.router === undefined) {
+      props.state.router = r.state;
+    }
+  } else {
+    props.state = {
+      router: r.state
+    };
   }
 
   if (props.actions === undefined) {
-    props.actions = { router: router.actions };
+    props.actions = { router: r.actions };
   } else {
-    props.actions.router = router.actions;
+    props.actions.router = r.actions;
   }
 
   return props;
