@@ -61,7 +61,7 @@
     ],
     "babel": "inherit"
   },
-  "dependencies": {
+  "peerDependencies": {
     "hyperapp": "^0.13.0"
   }
 }

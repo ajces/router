@@ -7,11 +7,18 @@ There are meta tags that cause bugs in certain browsers if modified after page l
 
 ```jsx
 import { h, app } from "hyperapp";
-import { router, updateMeta, Link, Router, Route, routerApp } from "@ajces/router";
+import { router, updateMeta, Link, Router, Route } from "@ajces/router";
 import { Header, Nav, Footer, About, Profile, Nested, NestedRoutes } from "./components";
 
-app(routerApp({
-  state: { count: 0 },
+const r = router(); // initializes the route state/actions/hook
+app({
+  state: {
+    count: 0,
+    router: r.state
+  },
+  actions: {
+    router: r.actions
+  },
   view: (state, actions) => (
     <div>
       <Header />
@@ -43,7 +50,8 @@ app(routerApp({
       </Router>
       <Footer />
     </div>
-  )
+  ),
+  hooks: [r.hook]
 }));
 ```
 

@@ -25,19 +25,6 @@ test.beforeEach(t => {
   });
 });
 
-test("router actions should be available with HOA applied", t => {
-  app(
-    routerApp({
-      hooks: [
-        (state, actions) => {
-          t.is(typeof actions.router.go === "function", true);
-          t.is(typeof actions.router.set === "function", true);
-        }
-      ]
-    })
-  );
-});
-
 test("set should properly set state.router.path", t => {
   const r = router();
   app({
@@ -62,7 +49,8 @@ test("set should properly set state.router.path", t => {
       },
       function(state, actions) {
         actions.router.set({ path: "/test" });
-      }
+      },
+      r.hook
     ]
   });
 });
@@ -79,6 +67,7 @@ test("go should properly trigger set when pathname changed", t => {
   };
 
   const r = router();
+
   let updateCount = 0;
   const appActions = app({
     state: {
@@ -93,7 +82,7 @@ test("go should properly trigger set when pathname changed", t => {
         set: r.actions.set
       }
     },
-    hooks: r.hooks
+    hooks: [r.hook]
   });
   appActions.router.go("/");
   t.is(updateCount, 1);
@@ -117,57 +106,10 @@ test("simulate popstate browser event", t => {
         t.is(state.router.path, "/test");
       }
     },
-    hooks: r.hooks
+    hooks: [r.hook]
   });
   location.pathname = "/test";
   location.search = "";
   handlers["popstate"]();
   appActions.test();
-});
-
-test("HOA hooks, state, actions should work even if props === {} are not supplied to props", t => {
-  app(routerApp({}));
-  t.is(typeof handlers["popstate"], "function");
-});
-
-test("HOA state should work whether user provides state.router or not...", t => {
-  app(
-    routerApp({
-      state: {},
-      hooks: [
-        function(state, actions) {
-          t.is(state.router.path !== undefined, true);
-        }
-      ]
-    })
-  );
-
-  app(
-    routerApp({
-      state: {
-        router: {
-          path: "/"
-        }
-      },
-      hooks: [
-        function(state, actions) {
-          t.is(state.router.path !== undefined, true);
-        }
-      ]
-    })
-  );
-});
-
-test("HOA actions should work whether user provides actions.router or not...", t=> {
-  app(
-    routerApp({
-      state: {},
-      actions: {},
-      hooks: [
-        function(state, actions) {
-          t.is(actions.router.go !== undefined, true);
-        }
-      ]
-    })
-  )
 });
