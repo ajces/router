@@ -3,9 +3,7 @@ export function router() {
     state: { path: location.pathname },
     actions: {
       set: function(state, actions, data) {
-        return {
-          router: data
-        };
+        return data;
       },
       go: function(state, actions, path) {
         if (location.pathname + location.search !== path) {

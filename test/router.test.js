@@ -53,9 +53,7 @@ test("set should properly set state.router.path", t => {
           return function(data) {
             return function(update) {
               t.deepEqual(data, {
-                router: {
-                  path: "/test"
-                }
+                path: "/test"
               });
               update(data);
             };
@@ -119,7 +117,7 @@ test("simulate popstate browser event", t => {
         t.is(state.router.path, "/test");
       }
     },
-    hooks: [].concat(r.hooks)
+    hooks: r.hooks
   });
   location.pathname = "/test";
   location.search = "";
