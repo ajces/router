@@ -38,31 +38,35 @@ test("router actions should be available with HOA applied", t => {
 });
 
 test("set should properly set state.router.path", t => {
-  app(
-    routerApp({
-      hooks: [
-        (state, actions) => {
-          console.log("load");
-          actions.router.set({ path: "/test" });
-          return function(info) {
-            console.log("why the fuck does this never get called?");
-            console.log("action");
-            return function() {
-              console.log("resolve");
-              return function(data) {
-                console.log(data);
-                t.deepEqual(data, {
-                  router: {
-                    path: "/test"
-                  }
-                });
-              };
+  const r = router();
+  app({
+    state: {
+      router: r.state
+    },
+    actions: {
+      router: r.actions
+    },
+    hooks: [
+      function() {
+        return function() {
+          return function(data) {
+            return function(update) {
+              console.log(arguments);
+              t.deepEqual(data, {
+                router: {
+                  path: "/test"
+                }
+              });
+              update(data);
             };
           };
-        }
-      ]
-    })
-  );
+        };
+      },
+      function(state, actions) {
+        actions.router.set({ path: "/test" });
+      }
+    ]
+  });
 });
 
 test("go should properly trigger set when pathname changed", t => {
