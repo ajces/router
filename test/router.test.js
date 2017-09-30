@@ -17,6 +17,7 @@ Object.defineProperty(window.location, "pathname", {
 test.beforeEach(t => {
   document.body.innerHTML = "";
   window.location.pathname = "/";
+  window.location.search = "";
   global.location = window.location;
   global.history = {};
   Object.keys(handlers).forEach(key => {
@@ -72,11 +73,11 @@ test("go should properly trigger set when pathname changed", t => {
   location.pathname = "/";
   location.search = "";
 
-  //let pushStateCount = 0;
+  let pushStateCount = 0;
   let lastPath;
   history.pushState = (state, title, path) => {
     lastPath = path;
-    //pushStateCount++;
+    pushStateCount++;
   };
 
   const r = router();
@@ -86,18 +87,23 @@ test("go should properly trigger set when pathname changed", t => {
       router: r.state
     },
     actions: {
-      router: r.actions
+      router: {
+        go: (state, actions, data) => {
+          updateCount++;
+          r.actions.go(state, actions, data);
+        },
+        set: r.actions.set
+      }
     },
     hooks: r.hooks
   });
-  console.log(appActions);
   appActions.router.go("/");
-  //t.is(updateCount, 1);
-  //t.is(pushStateCount, 0);
+  t.is(updateCount, 1);
+  t.is(pushStateCount, 0);
 
   appActions.router.go("/home");
-  //t.is(updateCount, 2);
-  //t.is(pushStateCount, 2);
+  t.is(updateCount, 2);
+  t.is(pushStateCount, 1);
   t.is(lastPath, "/home");
 });
 
