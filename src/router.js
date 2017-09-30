@@ -10,6 +10,9 @@ export function router() {
       go: function(state, actions, path) {
         if (location.pathname + location.search !== path) {
           history.pushState({}, "", path);
+          if (actions.router === undefined) {
+            console.log("go was sent undefined actions...");
+          }
           actions.router.set({
             path: path
           });
@@ -18,6 +21,9 @@ export function router() {
     },
     hooks: [
       function(state, actions) {
+        if (actions === undefined) {
+          console.log("load hook was sent undefined actions");
+        }
         addEventListener("popstate", function(event) {
           actions.router.set({ path: location.pathname + location.search });
         });
