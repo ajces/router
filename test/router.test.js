@@ -124,3 +124,50 @@ test("simulate popstate browser event", t => {
   handlers["popstate"]();
   appActions.test();
 });
+
+test("HOA hooks, state, actions should work even if props === {} are not supplied to props", t => {
+  app(routerApp({}));
+  t.is(typeof handlers["popstate"], "function");
+});
+
+test("HOA state should work whether user provides state.router or not...", t => {
+  app(
+    routerApp({
+      state: {},
+      hooks: [
+        function(state, actions) {
+          t.is(state.router.path !== undefined, true);
+        }
+      ]
+    })
+  );
+
+  app(
+    routerApp({
+      state: {
+        router: {
+          path: "/"
+        }
+      },
+      hooks: [
+        function(state, actions) {
+          t.is(state.router.path !== undefined, true);
+        }
+      ]
+    })
+  );
+});
+
+test("HOA actions should work whether user provides actions.router or not...", t=> {
+  app(
+    routerApp({
+      state: {},
+      actions: {},
+      hooks: [
+        function(state, actions) {
+          t.is(actions.router.go !== undefined, true);
+        }
+      ]
+    })
+  )
+});
