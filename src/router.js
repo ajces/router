@@ -22,7 +22,7 @@ export function router() {
       }
     ]
   };
-};
+}
 
 export function routerApp(props) {
   var r = router();
@@ -37,15 +37,15 @@ export function routerApp(props) {
       props.state.router = r.state;
     }
   } else {
-    props.state = {
-      router: r.state
-    };
+    props.state = { router: r.state };
   }
 
-  if (props.actions === undefined) {
-    props.actions = { router: r.actions };
+  if (props.actions !== undefined) {
+    if (props.actions.router === undefined) {
+      props.actions.router = r.actions;
+    }
   } else {
-    props.actions.router = r.actions;
+    props.actions = { router: r.actions };
   }
 
   return props;
