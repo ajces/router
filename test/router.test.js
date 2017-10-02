@@ -5,7 +5,8 @@ import { router, routerApp } from "../src/router";
 require("undom/register");
 
 global.window = { location: {} };
-window.requestAnimationFrame = setTimeout;
+window.requestAnimationFrame = cb => cb(Date.now);
+global.requestAnimationFrame = window.requestAnimationFrame;
 const handlers = {};
 global.addEventListener = (name, fn) => {
   handlers[name] = fn;
@@ -15,7 +16,8 @@ Object.defineProperty(window.location, "pathname", {
 });
 
 test.beforeEach(t => {
-  document.body.innerHTML = "";
+  document.body = document.createElement("body");
+  document.head = document.createElement("head");
   window.location.pathname = "/";
   window.location.search = "";
   global.location = window.location;
@@ -73,6 +75,7 @@ test("go should properly trigger set when pathname changed", t => {
     state: {
       router: r.state
     },
+    view: state => h("div", {}, [state.router.path]),
     actions: {
       router: {
         go: (state, actions, data) => {
@@ -87,6 +90,7 @@ test("go should properly trigger set when pathname changed", t => {
   appActions.router.go("/");
   t.is(updateCount, 1);
   t.is(pushStateCount, 0);
+  //console.log(document.body);
 
   appActions.router.go("/home");
   t.is(updateCount, 2);
